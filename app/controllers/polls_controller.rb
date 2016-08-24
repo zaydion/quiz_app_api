@@ -6,25 +6,25 @@ class PollsController < ApplicationController
   end
 
   def results
-    @results = {}
-    @questions = []
+    @results = []
 
+    add_poll
+    @results
+  end
+
+  def add_poll
     @polls.map do |poll|
-      @results[poll.name] = add_questions(poll)
+      @results << Hash['name', poll.name, 'questions', add_questions(poll)]
     end
     @results
   end
 
-
   def add_questions(poll)
-    poll.questions.map do |question|
-      @questions << Hash[question.prompt, add_options(question)]
-    end
-    @questions
+    poll.questions.map { |question| Hash['prompt', question.prompt, 'options', add_options(question)] }
   end
 
   def add_options(question)
-    question.options.map { |option| Hash[option.name, option.score] }
+    question.options.map { |option| Hash['name', option.name, 'score', option.score] }
   end
 
 end
