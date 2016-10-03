@@ -10,17 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160819163443) do
+ActiveRecord::Schema.define(version: 20161003010258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "options", force: :cascade do |t|
     t.string   "name"
-    t.integer  "score",       default: 0
     t.integer  "question_id"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.index ["question_id"], name: "index_options_on_question_id", using: :btree
   end
 
@@ -38,6 +37,15 @@ ActiveRecord::Schema.define(version: 20160819163443) do
     t.index ["poll_id"], name: "index_questions_on_poll_id", using: :btree
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.integer  "value",      default: 1
+    t.integer  "option_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.index ["option_id"], name: "index_votes_on_option_id", using: :btree
+  end
+
   add_foreign_key "options", "questions"
   add_foreign_key "questions", "polls"
+  add_foreign_key "votes", "options"
 end
