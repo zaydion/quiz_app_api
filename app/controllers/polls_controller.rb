@@ -2,7 +2,7 @@ class PollsController < ApplicationController
 
   def index
     @polls = Poll.all
-    render json: @polls.to_json(include: {questions: {include: :options}})
+    render json: @polls.to_json(include: {questions: {include: {options: {include: :votes}}}})
   end
 
   def show
